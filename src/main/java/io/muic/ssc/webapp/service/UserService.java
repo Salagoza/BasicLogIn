@@ -14,6 +14,7 @@ public class UserService {
     private static final String INSERT_USER_SQL = "INSERT INTO user (username,password,display_name) VALUES (?,?,?);";
     private static final String SELECT_USER_SQL = "SELECT * FROM user WHERE username = ?;";
     private static final String SELECT_ALL_USERS_SQL = "SElECT * FROM user;";
+    private static final String DELETE_ALL_USERS_SQL = "DELETE FROM user WHERE username = ?;";
 
     private static UserService service;
     private DatabaseConnectionService databaseConnectionService;
@@ -101,9 +102,20 @@ public class UserService {
         }
         return users;
     }
-    // delete user
-    public void deleteUserByUsername(){
 
+    // delete user
+    public boolean deleteUserByUsername(String username){
+        try(
+                Connection connection = databaseConnectionService.getConnection();
+                PreparedStatement ps = connection.prepareStatement(DELETE_ALL_USERS_SQL);
+        ){
+            ps.setString(1,username);
+            int deleteCount = ps.executeUpdate();
+            connection.commit();
+            return deleteCount>0;
+        } catch (SQLException throwables) {
+            return false;
+        }
     }
     // update user by user id
 
@@ -115,5 +127,6 @@ public class UserService {
             e.printStackTrace();
         }
     }
+
 
 }

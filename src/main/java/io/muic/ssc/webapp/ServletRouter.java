@@ -1,6 +1,7 @@
 package io.muic.ssc.webapp;
 
 import io.muic.ssc.webapp.service.SecurityService;
+import io.muic.ssc.webapp.servlet.DeleteUserServlet;
 import io.muic.ssc.webapp.servlet.HomeServlet;
 import io.muic.ssc.webapp.servlet.LoginServlet;
 import io.muic.ssc.webapp.servlet.LogoutServlet;
@@ -19,6 +20,7 @@ public class ServletRouter {
         routables.add(HomeServlet.class);
         routables.add(LoginServlet.class);
         routables.add(LogoutServlet.class);
+        routables.add(DeleteUserServlet.class);
     }
 
     private SecurityService securityService;

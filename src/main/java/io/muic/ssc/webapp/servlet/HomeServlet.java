@@ -1,6 +1,7 @@
 package io.muic.ssc.webapp.servlet;
 
 import io.muic.ssc.webapp.Routable;
+import io.muic.ssc.webapp.model.User;
 import io.muic.ssc.webapp.service.SecurityService;
 import io.muic.ssc.webapp.service.UserService;
 
@@ -32,12 +33,17 @@ public class HomeServlet extends HttpServlet implements Routable {
         boolean authorized = securityService.isAuthorized(request);
         if(authorized){
             String username = (String) request.getSession().getAttribute("username");
-            request.setAttribute("username",username);
             UserService userService = UserService.getInstance();
+
+            request.setAttribute("currentUser",userService.findbyUsername(username));
             request.setAttribute("users",userService.findAll());
+
             RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/home.jsp");
             rd.include(request,response);
+
         }else{
+            request.removeAttribute("hasError");
+            request.removeAttribute("message");
             response.sendRedirect("/login");
         }
     }
