@@ -55,9 +55,11 @@ public class UserService {
 
     // find user by username
     public User findbyUsername(String username){
-        try{
-            Connection connection = databaseConnectionService.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SELECT_USER_SQL);
+        try(
+                Connection connection = databaseConnectionService.getConnection();
+                PreparedStatement ps = connection.prepareStatement(SELECT_USER_SQL);
+
+        ){
             ps.setString(1,username);
             ResultSet resultSet = ps.executeQuery();
             resultSet.next();
@@ -78,9 +80,11 @@ public class UserService {
     // list all users in the database
     public List<User> findAll(){
         List<User> users = new ArrayList<>();
-        try{
-            Connection connection = databaseConnectionService.getConnection();
-            PreparedStatement ps = connection.prepareStatement(SELECT_ALL_USERS_SQL);
+        try(
+                Connection connection = databaseConnectionService.getConnection();
+                PreparedStatement ps = connection.prepareStatement(SELECT_ALL_USERS_SQL);
+        ){
+
             ResultSet resultSet = ps.executeQuery();
 
             while(resultSet.next()){
