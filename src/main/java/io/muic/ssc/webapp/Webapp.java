@@ -30,7 +30,7 @@ public class Webapp {
 
             tomcat.start();
             tomcat.getServer().await();
-        } catch (ServletException | LifecycleException ex) {
+        } catch (LifecycleException | ServletException ex) {
             ex.printStackTrace();
         }
     }

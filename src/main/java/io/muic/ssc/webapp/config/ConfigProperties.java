@@ -7,14 +7,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
 
 public class ConfigProperties {
 
-    private String driverClassName;
-    private String connectionUrl;
-    private String username;
-    private String password;
+    private String databaseDriverClassName;
+    private String databaseConnectionUrl;
+    private String databaseUsername;
+    private String databasePassword;
 
 }
