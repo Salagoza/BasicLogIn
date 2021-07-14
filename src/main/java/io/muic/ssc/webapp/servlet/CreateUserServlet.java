@@ -1,7 +1,6 @@
 package io.muic.ssc.webapp.servlet;
 
 import io.muic.ssc.webapp.Routable;
-import io.muic.ssc.webapp.model.User;
 import io.muic.ssc.webapp.service.SecurityService;
 import io.muic.ssc.webapp.service.UserService;
 
@@ -12,15 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class HomeServlet extends HttpServlet implements Routable {
+public class CreateUserServlet extends HttpServlet implements Routable {
 
     private SecurityService securityService;
 
-    private UserService userService;
 
     @Override
     public String getMapping() {
-        return "/index.jsp";
+        return "/user/create";
     }
 
     @Override
@@ -35,10 +33,9 @@ public class HomeServlet extends HttpServlet implements Routable {
             String username = (String) request.getSession().getAttribute("username");
             UserService userService = UserService.getInstance();
 
-            request.setAttribute("currentUser",userService.findbyUsername(username));
-            request.setAttribute("users",userService.findAll());
+            request.setAttribute("user",userService.findbyUsername(username));
 
-            RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/home.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
             rd.include(request,response);
 
             request.getSession().removeAttribute("hasError");

@@ -1,10 +1,7 @@
 package io.muic.ssc.webapp;
 
 import io.muic.ssc.webapp.service.SecurityService;
-import io.muic.ssc.webapp.servlet.DeleteUserServlet;
-import io.muic.ssc.webapp.servlet.HomeServlet;
-import io.muic.ssc.webapp.servlet.LoginServlet;
-import io.muic.ssc.webapp.servlet.LogoutServlet;
+import io.muic.ssc.webapp.servlet.*;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 
@@ -21,6 +18,7 @@ public class ServletRouter {
         routables.add(LoginServlet.class);
         routables.add(LogoutServlet.class);
         routables.add(DeleteUserServlet.class);
+        routables.add(CreateUserServlet.class);
     }
 
     private SecurityService securityService;
