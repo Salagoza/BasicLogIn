@@ -110,7 +110,7 @@ public class UserService {
     public static void main(String[] args) throws UserServiceException{
         UserService userService = UserService.getInstance();
         try{
-            userService.createUser("admin","123456","Admin");
+            userService.createUser("copter","cop1234567","Salagoza");
         } catch (UserServiceException e) {
             e.printStackTrace();
         }
