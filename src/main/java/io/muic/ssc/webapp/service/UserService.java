@@ -1,18 +1,37 @@
 package io.muic.ssc.webapp.service;
 
 import io.muic.ssc.webapp.model.User;
+import lombok.Data;
 import lombok.Setter;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService {
 
     private static final String INSERT_USER_SQL = "INSERT INTO user (username,password,display_name) VALUES (?,?,?);";
     private static final String SELECT_USER_SQL = "SELECT * FROM user WHERE username = ?;";
+    private static final String SELECT_ALL_USERS_SQL = "SElECT * FROM user;";
 
-    @Setter
+    private static UserService service;
     private DatabaseConnectionService databaseConnectionService;
+
+    private UserService(){
+
+    }
+
+    public static UserService getInstance(){
+        if (service == null){
+            service = new UserService();
+            service.setDatabaseConnectionService(DatabaseConnectionService.getInstance());
+        }
+        return service;
+    }
+    private void setDatabaseConnectionService(DatabaseConnectionService databaseConnectionService){
+        this.databaseConnectionService = databaseConnectionService;
+    }
 
     //create new user
     public void createUser(String username, String password ,String displayName) throws UserServiceException{
@@ -33,6 +52,7 @@ public class UserService {
             throw new UserServiceException(throwables.getMessage());
         }
     }
+
     // find user by username
     public User findbyUsername(String username){
         try{
@@ -54,16 +74,42 @@ public class UserService {
            return null;
         }
     }
+
+    // list all users in the database
+    public List<User> findAll(){
+        List<User> users = new ArrayList<>();
+        try{
+            Connection connection = databaseConnectionService.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_ALL_USERS_SQL);
+            ResultSet resultSet = ps.executeQuery();
+
+            while(resultSet.next()){
+                users.add(new User(
+                        resultSet.getLong("id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("display_Name")
+                ));
+            }
+        }
+        catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return users;
+    }
     // delete user
-    // list all users
+    public void deleteUserByUsername(){
+
+    }
     // update user by user id
 
     public static void main(String[] args) throws UserServiceException{
-        UserService userService = new UserService();
-        userService.setDatabaseConnectionService(new DatabaseConnectionService());
-        User user = userService.findbyUsername("salagoza");
-        System.out.println(user.getUsername());
-
+        UserService userService = UserService.getInstance();
+        try{
+            userService.createUser("admin","123456","Admin");
+        } catch (UserServiceException e) {
+            e.printStackTrace();
+        }
     }
 
 }

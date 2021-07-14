@@ -1,7 +1,9 @@
 package io.muic.ssc.webapp;
 
+import io.muic.ssc.webapp.service.DatabaseConnectionService;
 import io.muic.ssc.webapp.service.SecurityService;
 
+import io.muic.ssc.webapp.service.UserService;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
@@ -19,7 +21,10 @@ public class Webapp {
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8085);
 
+
         SecurityService securityService = new SecurityService();
+        securityService.setUserService(UserService.getInstance());
+
         ServletRouter servletRouter = new ServletRouter();
         servletRouter.setSecurityService(securityService);
 

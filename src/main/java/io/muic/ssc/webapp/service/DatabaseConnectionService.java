@@ -10,6 +10,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnectionService {
 
+    private static DatabaseConnectionService service;
     private final HikariDataSource ds;
 
     public DatabaseConnectionService() {
@@ -28,5 +29,12 @@ public class DatabaseConnectionService {
 
     public Connection getConnection() throws SQLException {
         return ds.getConnection();
+    }
+
+    public static DatabaseConnectionService getInstance(){
+        if (service == null){
+            service = new DatabaseConnectionService();
+        }
+        return service;
     }
 }
