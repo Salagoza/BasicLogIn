@@ -28,12 +28,12 @@
             <c:if test="${not empty message}">
                 <c:choose>
                     <c:when test="${hasError}">
-                        <div class="alert alert-success" role="alert">
+                        <div class="alert alert-danger" role="alert">
                                 ${message}
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="alert alert-danger" role="alert">
+                        <div class="alert alert-success" role="alert">
                                 ${message}
                         </div>
                     </c:otherwise>
@@ -66,7 +66,7 @@
                         <td class="py-3">${user.username}</td>
                         <td class="py-3">${user.displayName}</td>
                         <td class="align-middle">
-                            <button class= "btn btn-warning btn-sm" type="button"><i class="fa fa-pencil"></i></button>
+                            <a class= "btn btn-warning btn-sm" type="button" href="/user/edit?username=${user.username}"><i class="fa fa-pencil"></i></a>
                             <c:if test="${currentUser.username != user.username}">
                                 <button
                                         class= "btn btn-danger btn-sm"
@@ -86,7 +86,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                Do you want to delete <b>${user.displayName}</b> (<b>(${user.username})</b>?
+                                                Do you want to delete <b>${user.displayName}</b> <b>(${user.username})</b>?
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

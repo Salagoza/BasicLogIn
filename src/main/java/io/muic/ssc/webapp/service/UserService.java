@@ -15,6 +15,7 @@ public class UserService {
     private static final String SELECT_USER_SQL = "SELECT * FROM user WHERE username = ?;";
     private static final String SELECT_ALL_USERS_SQL = "SElECT * FROM user;";
     private static final String DELETE_ALL_USERS_SQL = "DELETE FROM user WHERE username = ?;";
+    private static final String UPDATE_USER_SQL = "UPDATE user SET display_name = ? WHERE username = ?;";
 
     private static UserService service;
     private DatabaseConnectionService databaseConnectionService;
@@ -117,7 +118,21 @@ public class UserService {
             return false;
         }
     }
-    // update user by user id
+
+    public void updateUserByUsername(String username, String displayName) throws UserServiceException {
+        try{
+            Connection connection = databaseConnectionService.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UPDATE_USER_SQL);
+            ps.setString(1,username);
+            ps.setString(2,displayName);
+            ps.executeUpdate();
+
+            connection.commit();
+        }
+        catch (SQLException throwables) {
+            throw new UserServiceException(throwables.getMessage());
+        }
+    }
 
     public static void main(String[] args) throws UserServiceException{
         UserService userService = UserService.getInstance();

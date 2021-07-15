@@ -13,14 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CreateUserServlet extends HttpServlet implements Routable {
+public class EditUserServlet extends HttpServlet implements Routable {
 
     private SecurityService securityService;
 
 
     @Override
     public String getMapping() {
-        return "/user/create";
+        return "/user/edit";
     }
 
     @Override
@@ -32,13 +32,15 @@ public class CreateUserServlet extends HttpServlet implements Routable {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         boolean authorized = securityService.isAuthorized(request);
         if(authorized){
-            //String username = (String) request.getSession().getAttribute("username");
-            //UserService userService = UserService.getInstance();
+            String username = StringUtils.trim((String) request.getParameter("username"));
+            UserService userService = UserService.getInstance();
 
-            //request.setAttribute("currentUser",userService.findbyUsername(username));
-            //request.setAttribute("users",userService.findAll());
+            User user = userService.findbyUsername(username);
+            request.setAttribute("user",user);
+            request.setAttribute("username",user.getDisplayName());
+            request.setAttribute("displayName",user.getDisplayName());
 
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/edit.jsp");
             rd.include(request,response);
 
             request.getSession().removeAttribute("hasError");
@@ -55,26 +57,23 @@ public class CreateUserServlet extends HttpServlet implements Routable {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         boolean authorized = securityService.isAuthorized(request);
         if(authorized){
-
+            // allow only editing displayName
             // make sure that username and displayName doesn't contain leading and trailing space
             String username = StringUtils.trim((String) request.getParameter("username"));
             String displayName = StringUtils.trim((String) request.getParameter("displayName"));
-            String password = (String) request.getParameter("password");
-            String cpassword = (String) request.getParameter("cpassword");
+
 
             UserService userService = UserService.getInstance();
+            User user = userService.findbyUsername(username);
+
             String errorMessage = null;
 
-            if(userService.findbyUsername(username)!= null){
-                errorMessage = String.format("Username %s has already been taken.", username);
+            if(user == null){
+                errorMessage = String.format("User %s does not exist.", username);
             }
 
             else if(StringUtils.isBlank(displayName)){
                 errorMessage = "Display Name can't be blank.";
-            }
-
-            else if(!StringUtils.equals(password,cpassword)){
-                errorMessage = String.format("Password does not matched.");
             }
 
             if(errorMessage != null){
@@ -82,9 +81,9 @@ public class CreateUserServlet extends HttpServlet implements Routable {
                 request.getSession().setAttribute("message",errorMessage);
             }else{
                 try{
-                    userService.createUser(username,password,displayName);
+                    userService.updateUserByUsername(username,displayName);
                     request.getSession().setAttribute("hasError",false);
-                    request.getSession().setAttribute("message",String.format("Username %s has been created successfully.", username));
+                    request.getSession().setAttribute("message",String.format("Username %s has been updated successfully.", username));
                     response.sendRedirect("/");
                     return;
                 } catch (Exception e) {
@@ -95,10 +94,8 @@ public class CreateUserServlet extends HttpServlet implements Routable {
 
             request.setAttribute("username",username);
             request.setAttribute("display",displayName);
-            request.setAttribute("password",password);
-            request.setAttribute("cpassword",cpassword);
-;
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
+
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/edit.jsp");
             rd.include(request,response);
 
             request.getSession().removeAttribute("hasError");

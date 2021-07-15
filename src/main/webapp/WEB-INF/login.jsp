@@ -28,7 +28,7 @@
                     </span>
                     <input type="password" class="form-control" name="password" placeholder="password" aria-label="Password" aria-describedby="password">
                 </div>
-                <button class="btn btn-primary d-block" type="submit"><i class="fa fa-sign-in"></i> &nbsp; Submit</button>
+                <button class="btn btn-primary d-block" type="submit"><i class="fa fa-sign-in"></i> &nbsp; Login</button>
             </form>
         </div>
     </div>
