@@ -67,6 +67,8 @@
                         <td class="py-3">${user.displayName}</td>
                         <td class="align-middle">
                             <a class= "btn btn-warning btn-sm" type="button" href="/user/edit?username=${user.username}"><i class="fa fa-pencil"></i></a>
+                            <a class= "btn btn-info btn-sm" type="button" href="/user/password?username=${user.username}"><i class="fa fa-pencil"></i></a>
+
                             <c:if test="${currentUser.username != user.username}">
                                 <button
                                         class= "btn btn-danger btn-sm"

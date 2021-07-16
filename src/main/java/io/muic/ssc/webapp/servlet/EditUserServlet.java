@@ -37,7 +37,7 @@ public class EditUserServlet extends HttpServlet implements Routable {
 
             User user = userService.findbyUsername(username);
             request.setAttribute("user",user);
-            request.setAttribute("username",user.getDisplayName());
+            request.setAttribute("username",user.getUsername());
             request.setAttribute("displayName",user.getDisplayName());
 
             RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/edit.jsp");
@@ -60,6 +60,7 @@ public class EditUserServlet extends HttpServlet implements Routable {
             // allow only editing displayName
             // make sure that username and displayName doesn't contain leading and trailing space
             String username = StringUtils.trim((String) request.getParameter("username"));
+            System.out.println(username);
             String displayName = StringUtils.trim((String) request.getParameter("displayName"));
 
 

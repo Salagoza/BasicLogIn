@@ -16,6 +16,7 @@ public class UserService {
     private static final String SELECT_ALL_USERS_SQL = "SElECT * FROM user;";
     private static final String DELETE_ALL_USERS_SQL = "DELETE FROM user WHERE username = ?;";
     private static final String UPDATE_USER_SQL = "UPDATE user SET display_name = ? WHERE username = ?;";
+    private static final String UPDATE_USER_PASSWORD_SQL = "UPDATE user SET password = ? WHERE username = ?;";
 
     private static UserService service;
     private DatabaseConnectionService databaseConnectionService;
@@ -118,15 +119,16 @@ public class UserService {
             return false;
         }
     }
-
+    //update user by username
     public void updateUserByUsername(String username, String displayName) throws UserServiceException {
         try{
             Connection connection = databaseConnectionService.getConnection();
             PreparedStatement ps = connection.prepareStatement(UPDATE_USER_SQL);
-            ps.setString(1,username);
-            ps.setString(2,displayName);
+            ps.setString(1,displayName);
+            ps.setString(2,username);
             ps.executeUpdate();
 
+            //System.out.println(ps);
             connection.commit();
         }
         catch (SQLException throwables) {
@@ -134,10 +136,27 @@ public class UserService {
         }
     }
 
+    public void changePassword(String username, String newPassword) throws UserServiceException {
+        try(
+            Connection connection = databaseConnectionService.getConnection();
+            PreparedStatement ps = connection.prepareStatement(UPDATE_USER_PASSWORD_SQL);
+        ) {
+                ps.setString(1,BCrypt.hashpw(newPassword,BCrypt.gensalt()));
+                ps.setString(2,username);
+                ps.executeUpdate();
+
+                System.out.println(ps);
+                connection.commit();
+            } catch (SQLException throwables) {
+                throw new UserServiceException(throwables.getMessage());
+        }
+    }
+
     public static void main(String[] args) throws UserServiceException{
         UserService userService = UserService.getInstance();
         try{
-            userService.createUser("copter","cop1234567","Salagoza");
+            userService.changePassword("admin","coptercopter");
+
         } catch (UserServiceException e) {
             e.printStackTrace();
         }
