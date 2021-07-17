@@ -151,16 +151,18 @@ public class UserService {
                 throw new UserServiceException(throwables.getMessage());
         }
     }
-
+    /*
     public static void main(String[] args) throws UserServiceException{
         UserService userService = UserService.getInstance();
         try{
             userService.changePassword("admin","coptercopter");
-
+            userService.createUser("copter","coptercopter","Thanawat");
         } catch (UserServiceException e) {
             e.printStackTrace();
         }
     }
+
+     */
 
 
 }

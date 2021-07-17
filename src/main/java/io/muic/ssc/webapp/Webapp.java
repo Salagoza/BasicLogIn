@@ -20,7 +20,7 @@ public class Webapp {
         File docBase = new File("src/main/webapp/");
         docBase.mkdirs();
         Tomcat tomcat = new Tomcat();
-        tomcat.setPort(8085);
+        tomcat.setPort(8082);
 
 
         SecurityService securityService = new SecurityService();
